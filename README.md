@@ -26,11 +26,11 @@ A comprehensive Personal Finance Management System built with the MERN stack (Mo
 ## 📸 Screenshots
 | Dashboard | Transactions |
 |-----------|--------------|
-| ![Dashboard](https://via.placeholder.com/400x250/4F46E5/FFFFFF?text=Dashboard) | ![Transactions](https://via.placeholder.com/400x250/059669/FFFFFF?text=Transactions) |
+| ![Dashboard](./screenshots//dashboard.png) | ![Transactions](./screenshots/transactions.png) |
 
 | Categories | Analytics |
 |------------|-----------|
-| ![Categories](https://via.placeholder.com/400x250/DC2626/FFFFFF?text=Categories) | ![Analytics](https://via.placeholder.com/400x250/7C3AED/FFFFFF?text=Analytics) |
+| ![Categories](./screenshots/categories.png) | ![Analytics](./screenshots/analytics.png) |
 
 ## 🚀 Getting Started
 
@@ -145,8 +145,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👨‍💻 Author
 **Your Name**
-- GitHub: [@yourusername](https://github.com/AshishSinsinwal)
-- LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/ashish-sinsinwal-a31b48318/)
+- GitHub: [Ashish Sinsinwal](https://github.com/AshishSinsinwal)
+- LinkedIn: [Ashish Sinsinwal](https://www.linkedin.com/in/ashish-sinsinwal-a31b48318/)
 
 ## 🙏 Acknowledgments
 - Thanks to the MERN stack community for excellent documentation and resources
