@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5001/api",
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 // Attach token to every request
