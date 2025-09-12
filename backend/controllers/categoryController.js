@@ -57,3 +57,31 @@ exports.updateCategory = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
+
+
+exports.deleteCategory = async(req , res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    console.log("Deleting category:", category);
+    console.log("Logged-in user:", req.user.id);
+
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    // Prevent deleting global categories
+    if (!category.user) {
+      return res.status(403).json({ message: "Cannot delete global category" });
+    }
+
+    // Prevent deleting another user's category
+    if (category.user.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await category.deleteOne();
+    res.json({ message: "Category deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+}

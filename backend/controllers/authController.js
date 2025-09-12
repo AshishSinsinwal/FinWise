@@ -113,16 +113,3 @@ exports.getMe = async (req, res) => {
     }
 };
 
-
-// @desc    OAuth Success
-// @route   GET /api/auth/oauth/success
-exports.oauthSuccess = (req, res) => {
-    if (req.user) {
-        const token = generateToken(req.user._id);
-        
-        // Redirect to frontend with token
-        res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${token}`);
-    } else {
-        res.redirect(`${process.env.CLIENT_URL}/login?error=oauth_failed`);
-    }
-};

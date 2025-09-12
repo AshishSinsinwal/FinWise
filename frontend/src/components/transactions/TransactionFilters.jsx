@@ -1,14 +1,20 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Search } from "lucide-react";
 
 export default function TransactionFilters({ filters, setFilters, categories }) {
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [key]: value
+      [key]: value,
     }));
   };
 
@@ -16,7 +22,7 @@ export default function TransactionFilters({ filters, setFilters, categories }) 
     <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
       <CardContent className="p-6">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Search */}
+          {/* 🔍 Search */}
           <div className="relative lg:col-span-2">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
@@ -27,8 +33,8 @@ export default function TransactionFilters({ filters, setFilters, categories }) 
             />
           </div>
 
-          {/* Type Filter */}
-          <Select 
+          {/* ⬆️⬇️ Type Filter */}
+          <Select
             value={filters.type}
             onValueChange={(value) => handleFilterChange("type", value)}
           >
@@ -42,8 +48,8 @@ export default function TransactionFilters({ filters, setFilters, categories }) 
             </SelectContent>
           </Select>
 
-          {/* Category Filter */}
-          <Select 
+          {/* 🏷️ Category Filter */}
+          <Select
             value={filters.category}
             onValueChange={(value) => handleFilterChange("category", value)}
           >
@@ -53,14 +59,14 @@ export default function TransactionFilters({ filters, setFilters, categories }) 
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
               {categories.map((category) => (
-                <SelectItem key={category.id} value={category.name}>
+                <SelectItem key={category._id} value={category._id}>
                   {category.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
 
-          {/* Date Range */}
+          {/* 📅 Date From */}
           <div className="flex gap-2">
             <Input
               type="date"
@@ -72,7 +78,7 @@ export default function TransactionFilters({ filters, setFilters, categories }) 
           </div>
         </div>
 
-        {/* Date Range - To */}
+        {/* 📅 Date To (mobile) */}
         <div className="mt-4 lg:hidden">
           <Input
             type="date"
@@ -82,7 +88,7 @@ export default function TransactionFilters({ filters, setFilters, categories }) 
           />
         </div>
 
-        {/* Hidden date range for larger screens */}
+        {/* 📅 Date To (desktop) */}
         <div className="hidden lg:block mt-4">
           <Input
             type="date"

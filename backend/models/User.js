@@ -14,13 +14,6 @@ const UserSchema = new mongoose.Schema({
         type: String,
         // Not required for OAuth
     },
-    googleId: String,
-    avatar: String,
-    provider: {
-        type: String,
-        enum: ['local', 'google'],
-        default: 'local'
-    },
     theme: {
         type: String,
         enum: ['light', 'dark'],

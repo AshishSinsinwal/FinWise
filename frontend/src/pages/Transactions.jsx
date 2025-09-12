@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import API from "../utils/api"; // centralized axios instance
+import API from "@/utils/api"; // your Axios instance
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "../components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Plus, ArrowUpDown } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 
 import TransactionList from "../components/transactions/TransactionList";
 import TransactionFilters from "../components/transactions/TransactionFilters";
@@ -26,30 +26,33 @@ export default function Transactions() {
   }, []);
 
   const loadData = async () => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const [transactionRes, categoryRes] = await Promise.all([
-        API.get("/transactions"),
+        API.get("/transactions"), // backend route
         API.get("/categories")
       ]);
+
+      // Assuming backend populates category in transaction
       setTransactions(transactionRes.data);
       setCategories(categoryRes.data);
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const filteredTransactions = transactions.filter(transaction => {
+    const categoryName = transaction.category?.name || "";
+
     const matchesSearch =
       transaction.description.toLowerCase().includes(filters.search.toLowerCase()) ||
-      transaction.category.toLowerCase().includes(filters.search.toLowerCase());
+      categoryName.toLowerCase().includes(filters.search.toLowerCase());
 
-    const matchesType =
-      filters.type === "all" || transaction.type === filters.type;
-
+    const matchesType = filters.type === "all" || transaction.type === filters.type;
     const matchesCategory =
-      filters.category === "all" || transaction.category === filters.category;
+      filters.category === "all" || transaction.category?._id === filters.category;
 
     let matchesDateRange = true;
     if (filters.dateFrom) {
@@ -77,9 +80,7 @@ export default function Transactions() {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">All Transactions</h1>
-            <p className="text-slate-600 mt-1">
-              Manage and review your financial history
-            </p>
+            <p className="text-slate-600 mt-1">Manage and review your financial history</p>
           </div>
           <Link to={createPageUrl("AddTransaction")}>
             <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
@@ -96,9 +97,7 @@ export default function Transactions() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-600 font-medium">Total Income</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    ${totalIncome.toFixed(2)}
-                  </p>
+                  <p className="text-2xl font-bold text-green-600">${totalIncome.toFixed(2)}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
                   <ArrowUpDown className="w-6 h-6 text-green-600" />
@@ -112,9 +111,7 @@ export default function Transactions() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-600 font-medium">Total Expenses</p>
-                  <p className="text-2xl font-bold text-red-600">
-                    ${totalExpenses.toFixed(2)}
-                  </p>
+                  <p className="text-2xl font-bold text-red-600">${totalExpenses.toFixed(2)}</p>
                 </div>
                 <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
                   <ArrowUpDown className="w-6 h-6 text-red-600" />
@@ -128,13 +125,7 @@ export default function Transactions() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-600 font-medium">Net Balance</p>
-                  <p
-                    className={`text-2xl font-bold ${
-                      totalIncome - totalExpenses >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
+                  <p className={`text-2xl font-bold ${totalIncome - totalExpenses >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     ${(totalIncome - totalExpenses).toFixed(2)}
                   </p>
                 </div>

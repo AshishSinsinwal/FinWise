@@ -45,6 +45,9 @@ export default function Categories() {
       loadData();
     } catch (error) {
       console.error("Error saving category:", error);
+      setShowForm(false);
+      setEditingCategory(null);
+      loadData();
     }
   };
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Edit, TrendingUp, TrendingDown, Hash } from "lucide-react";
+import { Edit, TrendingUp, TrendingDown, Hash , Trash} from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function CategoryCard({ category, stats, onEdit }) {

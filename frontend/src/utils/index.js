@@ -15,6 +15,8 @@ export function createPageUrl(pageName) {
       return "/categories";
     case "Analytics":
       return "/analytics";
+    case "Transactions":
+      return "/transactions";
     default:
       return "/";
   }
