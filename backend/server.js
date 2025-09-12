@@ -7,10 +7,6 @@ const connectDB = require('./config/db');
 
 // Connect to Database
 connectDB();
-
-// Passport config
-require('./config/passport');
-
 const app = express();
 
 // Middleware
