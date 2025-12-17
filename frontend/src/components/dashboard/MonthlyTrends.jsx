@@ -2,6 +2,8 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Calendar } from "lucide-react";
+// Import your global formatters
+import { formatCurrencyCompact, formatCurrencyFull } from "../../utils/formatters";
 
 export default function MonthlyTrends({ transactions, isLoading }) {
   const getMonthlyData = () => {
@@ -54,18 +56,37 @@ export default function MonthlyTrends({ transactions, isLoading }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-80">
+        <div className="h-80 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis dataKey="month" stroke="#64748b" />
-              <YAxis stroke="#64748b" />
-              <Tooltip 
-                formatter={(value, name) => [`$${value.toFixed(2)}`, name === "income" ? "Income" : "Expenses"]}
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+              <XAxis 
+                dataKey="month" 
+                stroke="#64748b" 
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
               />
-              <Legend />
-              <Bar dataKey="income" fill="#10b981" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="expenses" fill="#ef4444" radius={[4, 4, 0, 0]} />
+              <YAxis 
+                stroke="#64748b" 
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                // ✅ Formats Y-Axis labels to $1M, $500K, etc.
+                tickFormatter={(value) => formatCurrencyCompact(value)}
+              />
+              <Tooltip 
+                cursor={{ fill: '#f1f5f9' }}
+                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                // ✅ Uses Full Currency in the tooltip so users see the exact amount
+                formatter={(value, name) => [
+                  formatCurrencyFull(value), 
+                  name === "income" ? "Income" : "Expenses"
+                ]}
+              />
+              <Legend iconType="circle" />
+              <Bar dataKey="income" name="income" fill="#10b981" radius={[4, 4, 0, 0]} barSize={30} />
+              <Bar dataKey="expenses" name="expenses" fill="#ef4444" radius={[4, 4, 0, 0]} barSize={30} />
             </BarChart>
           </ResponsiveContainer>
         </div>

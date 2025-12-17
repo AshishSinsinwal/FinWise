@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://finwise-2rjk.onrender.com/api" || "http://localhost:5001/api",
+  baseURL:  "https://finwise-2rjk.onrender.com/api" || "http://localhost:5001/api"
 });
 
 // Attach token to every request

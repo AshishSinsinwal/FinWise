@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google'; // Import this
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Wallet, User, Mail, Lock, Github } from 'lucide-react';
+import { Wallet, User, Mail, Lock } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import axios from 'axios';
-import API from "../utils/api"; // centralized axios instance
+import API from "../utils/api";
 
 export default function Signup() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: ''
-    });
+    const [formData, setFormData] = useState({ name: '', email: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     
@@ -23,30 +19,39 @@ export default function Signup() {
     const { login } = useAuth();
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
-
         try {
             const response = await API.post("/auth/register", formData);
             login(response.data.token, response.data.user);
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'An error occurred');
+        } finally {
+            setLoading(false);
         }
-        
-        setLoading(false);
     };
 
-    const handleOAuthSignup = (provider) => {
-        window.location.href = `${API}/auth/${provider}`;
+    // Google Sign Up (Same as Login)
+    const handleGoogleSuccess = async (credentialResponse) => {
+        setLoading(true);
+        setError('');
+        try {
+            const response = await API.post("/auth/google", { 
+                token: credentialResponse.credential 
+            });
+            login(response.data.token, response.data.user);
+            navigate('/dashboard');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Google signup failed');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -57,7 +62,6 @@ export default function Signup() {
                         <Wallet className="w-8 h-8 text-white" />
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900">Get Started</h1>
-                    <p className="text-gray-600 mt-2">Create your FinanceTracker account</p>
                 </div>
 
                 <Card className="shadow-xl border-0">
@@ -76,67 +80,47 @@ export default function Signup() {
                                 <Label htmlFor="name">Full Name</Label>
                                 <div className="relative">
                                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                    <Input
-                                        id="name"
-                                        name="name"
-                                        type="text"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        className="pl-10"
-                                        placeholder="Enter your full name"
-                                        required
-                                    />
+                                    <Input id="name" name="name" type="text" value={formData.name} onChange={handleChange} className="pl-10" required />
                                 </div>
                             </div>
-
                             <div>
                                 <Label htmlFor="email">Email Address</Label>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                    <Input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        className="pl-10"
-                                        placeholder="Enter your email"
-                                        required
-                                    />
+                                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} className="pl-10" required />
                                 </div>
                             </div>
-
                             <div>
                                 <Label htmlFor="password">Password</Label>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                    <Input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        className="pl-10"
-                                        placeholder="Create a password"
-                                        required
-                                        minLength={6}
-                                    />
+                                    <Input id="password" name="password" type="password" value={formData.password} onChange={handleChange} className="pl-10" minLength={6} required />
                                 </div>
                             </div>
-
-                            <Button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                            >
+                            <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-blue-600 to-purple-600">
                                 {loading ? 'Creating Account...' : 'Sign Up'}
                             </Button>
                         </form>
+
+                        <div className="mt-6">
+                            <div className="relative mb-6">
+                                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-300" /></div>
+                                <div className="relative flex justify-center text-sm">
+                                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                                </div>
+                            </div>
+                            <div className="flex justify-center">
+                                <GoogleLogin 
+                                    onSuccess={handleGoogleSuccess} 
+                                    onError={() => setError('Google signup failed')}
+                                    theme="outline"
+                                    shape="pill"
+                                />
+                            </div>
+                        </div>
+
                         <p className="text-center text-sm text-gray-600 mt-6">
-                            Already have an account?{' '}
-                            <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
-                                Sign in
-                            </Link>
+                            Already have an account? <Link to="/login" className="text-blue-600">Sign in</Link>
                         </p>
                     </CardContent>
                 </Card>

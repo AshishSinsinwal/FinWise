@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion } from "framer-motion";
 import { Palette, Save, X } from "lucide-react";
-// const API_URL = "http://localhost:5001/api/categories"; // your backend endpoint
 import API from "@/utils/api";
 const PRESET_COLORS = [
   "#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6",
