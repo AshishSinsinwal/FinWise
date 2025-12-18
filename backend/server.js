@@ -7,14 +7,16 @@ const connectDB = require('./config/db');
 
 // Connect to Database
 connectDB();
+
 const app = express();
+app.use(express.json());
+
 
 // Middleware
 app.use(cors({
-    origin: '*',
+    origin: 'https://fin-wise-ashen.vercel.app',
     credentials: true
 }));
-app.use(express.json());
 
 // Express session
 app.use(
@@ -22,7 +24,7 @@ app.use(
         secret: process.env.JWT_SECRET,
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: false } // Set to true in production with HTTPS
+        cookie: { secure: true } // Set to true in production with HTTPS
     })
 );
 
