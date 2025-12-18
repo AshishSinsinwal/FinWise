@@ -17,7 +17,6 @@ import Categories from './pages/Categories';
 import Analytics from './pages/Analytics';
 
 function App() {
-    // Replace with your actual Client ID from Google Cloud Console
     const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
     return (
@@ -56,11 +55,13 @@ function App() {
                                 <Layout><Analytics /></Layout>
                             </ProtectedRoute>
                         } />
+
+                        {/* ✅ CATCH-ALL ROUTE: Handle random URLs */}
+                        <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
                 </Router>
             </AuthProvider>
         </GoogleOAuthProvider>
     );
 }
-
 export default App;
