@@ -47,7 +47,7 @@ CategorySchema.pre('findOneAndDelete', async function (next) {
   const category = await this.model.findOne(this.getQuery());
   if (!category) return next();
 
-  const Transaction = mongoose.model('Transaction');
+  const Transaction = mongoose.model('FinWiseTransaction');
 
   const count = await Transaction.countDocuments({
     category: category._id
