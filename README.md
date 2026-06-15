@@ -144,7 +144,6 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 👨‍💻 Author
-**Your Name**
 - GitHub: [Ashish Sinsinwal](https://github.com/AshishSinsinwal)
 - LinkedIn: [Ashish Sinsinwal](https://www.linkedin.com/in/ashish-sinsinwal-a31b48318/)
 
